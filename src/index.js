@@ -25,14 +25,14 @@ io.on("connection", (socket) => {
         socket.userId = data.userId;
 
         activeUsers[socket.userId] = data;
-        io.emit("update_users_list", Object.values(activeUsers));
+        io.emit("update_users_list", activeUsers);
     });
 
     socket.on("disconnect_user", (data) => {
         activeUsers[data.userId] = undefined;
         socket.userId = undefined;
 
-        io.emit("update_users_list", Object.values(activeUsers));
+        io.emit("update_users_list", activeUsers);
     });
 
     socket.on("send_message", (data) => {
@@ -48,6 +48,6 @@ io.on("connection", (socket) => {
         console.log(socket.userId, "disconnected");
         activeUsers[socket.userId] = undefined;
         socket.userId = undefined;
-        io.emit("update_users_list", Object.values(activeUsers));
+        io.emit("update_users_list", activeUsers);
     })
 });
