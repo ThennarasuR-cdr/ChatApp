@@ -15,6 +15,7 @@ const server = app.listen(PORT, () => {
 });
 
 const activeUsers = {};
+const messages = [];
 
 const io = socket(server, { cors: { origin: 'http://localhost:5173' } });
 io.on("connection", (socket) => {
@@ -35,11 +36,12 @@ io.on("connection", (socket) => {
     });
 
     socket.on("send_message", (data) => {
-        io.emit("send_message", {
+        messages.push({
             from: socket.userId,
-            message: data.message,
-            sentAt: data.sentAt
-        });
+            content: data.message,
+            time: new Date().toUTCString()
+        })
+        io.emit("send_messages_list", messages);
     });
 
     socket.on("disconnect", () => {
